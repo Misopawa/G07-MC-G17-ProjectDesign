@@ -27,6 +27,7 @@ public class SDGLearningApp extends JFrame {
 
         buildDashboard();
         buildLearningScreens();
+        buildQuizScreen();
 
         add(mainContainer);
     }
@@ -92,14 +93,6 @@ public class SDGLearningApp extends JFrame {
 
             centerContent.add(imageLabel, BorderLayout.CENTER);
             pagePanel.add(centerContent, BorderLayout.CENTER);
-           
-          
-
-            imageLabel.setPreferredSize(new Dimension(300, 200));
-            imageLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-            
-            centerContent.add(imageLabel, BorderLayout.CENTER);
-            pagePanel.add(centerContent, BorderLayout.CENTER);
 
             JPanel navPanel = new JPanel();
             JButton homeBtn = new JButton("Home");
@@ -119,13 +112,40 @@ public class SDGLearningApp extends JFrame {
                 navPanel.add(nextBtn);
             } else {
                 JButton finishBtn = new JButton("Go to Quiz");
-                // This connects to Member 2's Quiz Module
+                finishBtn.addActionListener(e -> cardLayout.show(mainContainer, "Quiz"));
                 navPanel.add(finishBtn);
             }
             
             pagePanel.add(navPanel, BorderLayout.SOUTH);
             mainContainer.add(pagePanel, "Page" + i);
         }
+    }
+
+    private void buildQuizScreen() {
+        JPanel quizPanel = new JPanel(new BorderLayout());
+        quizPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        JLabel quizTitle = new JLabel("Quiz Section", SwingConstants.CENTER);
+        quizTitle.setFont(new Font("Arial", Font.BOLD, 24));
+        quizPanel.add(quizTitle, BorderLayout.NORTH);
+        
+        JLabel quizContent = new JLabel("Quiz content goes here", SwingConstants.CENTER);
+        quizContent.setFont(new Font("Arial", Font.PLAIN, 16));
+        quizPanel.add(quizContent, BorderLayout.CENTER);
+        
+        JPanel quizNavPanel = new JPanel();
+        JButton backBtn = new JButton("Back to Learning");
+        backBtn.addActionListener(e -> {
+            try {
+                learningModule.displayPage(9); // Go back to last learning page
+            } catch (PageNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        quizNavPanel.add(backBtn);
+        
+        quizPanel.add(quizNavPanel, BorderLayout.SOUTH);
+        mainContainer.add(quizPanel, "Quiz");
     }
 
     public static void main(String[] args) {
