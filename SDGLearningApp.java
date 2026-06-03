@@ -13,6 +13,8 @@ public class SDGLearningApp extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainContainer;
     private LearningModule learningModule;
+    private QuizModule quizModule;
+    private JPanel quizContentPanel;
 
     public SDGLearningApp() {
         setTitle("SDG 12: Responsible Consumption and Production");
@@ -24,6 +26,7 @@ public class SDGLearningApp extends JFrame {
         mainContainer = new JPanel(cardLayout);
         
         learningModule = new LearningModule(mainContainer, cardLayout);
+        quizModule = new QuizModule();
 
         buildDashboard();
         buildLearningScreens();
@@ -112,7 +115,11 @@ public class SDGLearningApp extends JFrame {
                 navPanel.add(nextBtn);
             } else {
                 JButton finishBtn = new JButton("Go to Quiz");
-                finishBtn.addActionListener(e -> cardLayout.show(mainContainer, "Quiz"));
+                finishBtn.addActionListener(e -> {
+                    quizModule.resetQuiz();
+                    displayQuizQuestion();
+                    cardLayout.show(mainContainer, "Quiz");
+                });
                 navPanel.add(finishBtn);
             }
             
@@ -125,17 +132,20 @@ public class SDGLearningApp extends JFrame {
         JPanel quizPanel = new JPanel(new BorderLayout());
         quizPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
+        // Header with title
         JLabel quizTitle = new JLabel("Quiz Section", SwingConstants.CENTER);
         quizTitle.setFont(new Font("Arial", Font.BOLD, 24));
         quizPanel.add(quizTitle, BorderLayout.NORTH);
         
-        JLabel quizContent = new JLabel("Quiz content goes here", SwingConstants.CENTER);
-        quizContent.setFont(new Font("Arial", Font.PLAIN, 16));
-        quizPanel.add(quizContent, BorderLayout.CENTER);
+        // Content panel (dynamically updated)
+        quizContentPanel = new JPanel(new BorderLayout());
+        quizPanel.add(quizContentPanel, BorderLayout.CENTER);
         
+        // Navigation panel at bottom (always visible)
         JPanel quizNavPanel = new JPanel();
         JButton backBtn = new JButton("Back to Learning");
         backBtn.addActionListener(e -> {
+            quizModule.resetQuiz();
             try {
                 learningModule.displayPage(9); // Go back to last learning page
             } catch (PageNotFoundException ex) {
@@ -146,6 +156,159 @@ public class SDGLearningApp extends JFrame {
         
         quizPanel.add(quizNavPanel, BorderLayout.SOUTH);
         mainContainer.add(quizPanel, "Quiz");
+    }
+
+    /**
+     * Dynamically displays the current quiz question or results
+     */
+    private void displayQuizQuestion() {
+        quizContentPanel.removeAll();
+        
+        if (quizModule.isQuizComplete()) {
+            // Quiz is complete, display results
+            displayQuizResults();
+        } else {
+            // Display current question
+            displayCurrentQuestion();
+        }
+        
+        quizContentPanel.revalidate();
+        quizContentPanel.repaint();
+    }
+
+    /**
+     * Displays the current question with options as buttons
+     */
+    private void displayCurrentQuestion() {
+        Question currentQuestion = quizModule.getCurrentQuestion();
+        
+        if (currentQuestion == null) {
+            return;
+        }
+        
+        // Create a scrollable panel for the content
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Question counter
+        JLabel questionCounterLabel = new JLabel(
+            "Question " + quizModule.getCurrentQuestionNumber() + " of " + quizModule.getTotalQuestions()
+        );
+        questionCounterLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        questionCounterLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(questionCounterLabel);
+        contentPanel.add(Box.createVerticalStrut(10));
+        
+        // Question text (wrapped)
+        JLabel questionLabel = new JLabel(
+            "<html><b>" + currentQuestion.getQuestionText() + "</b></html>"
+        );
+        questionLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        questionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        questionLabel.setMaximumSize(new Dimension(350, 100));
+        contentPanel.add(questionLabel);
+        contentPanel.add(Box.createVerticalStrut(20));
+        
+        // Answer options as buttons
+        String[] options = currentQuestion.getOptions();
+        for (int i = 0; i < options.length; i++) {
+            final int answerIndex = i;
+            JButton optionButton = new JButton(options[i]);
+            optionButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            optionButton.setMaximumSize(new Dimension(350, 50));
+            optionButton.setFont(new Font("Arial", Font.PLAIN, 12));
+            optionButton.setHorizontalAlignment(SwingConstants.LEFT);
+            
+            // Add action listener to submit answer and move to next question
+            optionButton.addActionListener(e -> {
+                quizModule.submitAnswer(answerIndex);
+                displayQuizQuestion(); // Refresh to show next question or results
+            });
+            
+            contentPanel.add(optionButton);
+            contentPanel.add(Box.createVerticalStrut(10));
+        }
+        
+        // Add content to scrollable pane
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        quizContentPanel.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * Displays the final quiz results and motivational message
+     */
+    private void displayQuizResults() {
+        quizModule.checkAnswer();
+        int score = quizModule.getFinalScore();
+        int correctCount = quizModule.getCorrectAnswerCount();
+        int totalQuestions = quizModule.getTotalQuestions();
+        
+        // Create results panel
+        JPanel resultsPanel = new JPanel();
+        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
+        resultsPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+        
+        // Title
+        JLabel resultsTitleLabel = new JLabel("Quiz Complete!");
+        resultsTitleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        resultsTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        resultsPanel.add(resultsTitleLabel);
+        resultsPanel.add(Box.createVerticalStrut(20));
+        
+        // Score
+        JLabel scoreLabel = new JLabel("Your Score: " + score + "%");
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        resultsPanel.add(scoreLabel);
+        
+        // Correct answers count
+        JLabel correctLabel = new JLabel("Correct Answers: " + correctCount + " out of " + totalQuestions);
+        correctLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        correctLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        resultsPanel.add(correctLabel);
+        resultsPanel.add(Box.createVerticalStrut(30));
+        
+        // Motivational message based on score
+        String motivationalMessage = getMotivationalMessage(score);
+        JLabel motivationLabel = new JLabel(
+            "<html><center>" + motivationalMessage + "</center></html>"
+        );
+        motivationLabel.setFont(new Font("Arial", Font.ITALIC, 12));
+        motivationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        motivationLabel.setMaximumSize(new Dimension(350, 100));
+        resultsPanel.add(motivationLabel);
+        resultsPanel.add(Box.createVerticalStrut(30));
+        
+        // Retake button
+        JButton retakeBtn = new JButton("Retake Quiz");
+        retakeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        retakeBtn.addActionListener(e -> {
+            quizModule.resetQuiz();
+            displayQuizQuestion();
+        });
+        resultsPanel.add(retakeBtn);
+        
+        quizContentPanel.add(resultsPanel, BorderLayout.CENTER);
+    }
+
+    /**
+     * Returns a motivational message based on the score
+     */
+    private String getMotivationalMessage(int score) {
+        if (score >= 90) {
+            return "🌟 Outstanding! You're an e-waste expert! Keep up the amazing work!";
+        } else if (score >= 75) {
+            return "👏 Great job! You have a solid understanding of e-waste management!";
+        } else if (score >= 60) {
+            return "📚 Good effort! Review the material to strengthen your knowledge.";
+        } else if (score >= 50) {
+            return "💪 You're on the right track! Study the concepts and try again.";
+        } else {
+            return "🔄 Don't give up! Review the learning materials and retake the quiz.";
+        }
     }
 
     public static void main(String[] args) {
