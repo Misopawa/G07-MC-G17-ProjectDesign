@@ -37,13 +37,13 @@ public class GamificationModule implements RewardSystem {
         this.totalPoints += points;
     }
 
-    // ====== METHOD OVERLOADING (Rubric Requirement) ======
+    // METHOD OVERLOADING
     // Add points with an extra bonus if the user finishes fast
     public void addPoints(int points, int bonus) {
         this.totalPoints += (points + bonus);
     }
 
-    // ====== GETTER METHODS (For GUI display use) ======
+    // GETTER METHODS (For GUI display use)
     public int getTotalPoints() {
         return totalPoints;
     }
