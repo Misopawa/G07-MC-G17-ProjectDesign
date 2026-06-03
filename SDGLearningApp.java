@@ -5,8 +5,9 @@ import java.awt.event.ActionListener;
 
 /**
  * Creator: Siti Nur Amira binti Zulkiply
- * Tester: [Insert Group Member Name Here]
+ * Tester: Rosaliny Lisa Anak Roza (106166)
  * Description: Main GUI for the Desktop-based SDG Learning Application.
+ * Integrated with Member 3's Gamification Module.
  */
 public class SDGLearningApp extends JFrame {
 
@@ -15,6 +16,9 @@ public class SDGLearningApp extends JFrame {
     private LearningModule learningModule;
     private QuizModule quizModule;
     private JPanel quizContentPanel;
+    
+    // ====== INTEGRATION: MEMBER 3 OBJECT DECLARATION ======
+    private GamificationModule gamificationModule;
 
     public SDGLearningApp() {
         setTitle("SDG 12: Responsible Consumption and Production");
@@ -27,6 +31,9 @@ public class SDGLearningApp extends JFrame {
         
         learningModule = new LearningModule(mainContainer, cardLayout);
         quizModule = new QuizModule();
+        
+        // ====== INTEGRATION: INITIALIZE MEMBER 3 OBJECT ======
+        gamificationModule = new GamificationModule();
 
         buildDashboard();
         buildLearningScreens();
@@ -239,12 +246,17 @@ public class SDGLearningApp extends JFrame {
 
     /**
      * Displays the final quiz results and motivational message
+     * Integrated with Member 3's Gamification logic and UI
      */
     private void displayQuizResults() {
         quizModule.checkAnswer();
         int score = quizModule.getFinalScore();
         int correctCount = quizModule.getCorrectAnswerCount();
         int totalQuestions = quizModule.getTotalQuestions();
+        
+        // ====== INTEGRATION: CALCULATE BADGES & POINTS ======
+        gamificationModule.awardBadge(score);
+        gamificationModule.addPoints(correctCount * 10);
         
         // Create results panel
         JPanel resultsPanel = new JPanel();
@@ -269,7 +281,15 @@ public class SDGLearningApp extends JFrame {
         correctLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         correctLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         resultsPanel.add(correctLabel);
-        resultsPanel.add(Box.createVerticalStrut(30));
+        resultsPanel.add(Box.createVerticalStrut(15));
+        
+        // ====== VISUAL UPDATE: DISPLAY MEMBER 3 OUTPUT (BADGE) ======
+        JLabel badgeLabel = new JLabel("Performance Level: " + gamificationModule.getCurrentBadge());
+        badgeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        badgeLabel.setForeground(new Color(46, 125, 50)); // Forest green color for eco-theme
+        badgeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        resultsPanel.add(badgeLabel);
+        resultsPanel.add(Box.createVerticalStrut(20));
         
         // Motivational message based on score
         String motivationalMessage = getMotivationalMessage(score);
