@@ -81,22 +81,3 @@ public class LearningModule implements ContentRenderable {
     public String getText(int index) { return pageTexts[index]; }
     public String getImagePath(int index) { return imagePaths[index]; }
 }
-        cardLayout.show(mainPanel, cardName);
-        System.out.println("Displaying: " + pageTitles[pageNum]);
-    }
-
-    @Override
-    public void displayPage(String topicTitle) throws PageNotFoundException {
-        for (int i = 0; i < pageTitles.length; i++) {
-            if (pageTitles[i].equalsIgnoreCase(topicTitle)) {
-                displayPage(i);
-                return;
-            }
-        }
-        throw new PageNotFoundException("Error: Topic '" + topicTitle + "' not found.");
-    }
-    
-    public String getTitle(int index) { return pageTitles[index]; }
-    public String getText(int index) { return pageTexts[index]; }
-    public String getImagePath(int index) { return imagePaths[index]; }
-}
