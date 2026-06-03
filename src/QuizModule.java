@@ -1,7 +1,7 @@
 /**
- *Member 2
- *Name: Mohamad Syahmi bin Soria
- *Matric ID: 84553
+ * Member 2
+ * Name: Mohamad Syahmi bin Soria
+ * Matric ID: 84553
  */
 
 import java.util.ArrayList;
@@ -32,72 +32,72 @@ public class QuizModule implements Evaluatable {
     
     /**
      * Initialize 20 sample questions (mix of Multiple Choice and True/False)
-     * This can be replaced with questions loaded from a file
+     * All questions focus on SDG 12: Responsible Consumption and Production (E-waste)
      */
     private void initializeQuestions() {
-        // Multiple Choice Questions
-        questions.add(new Question("What is the capital of France?", 
-            new String[]{"London", "Paris", "Berlin", "Madrid"}, 1, "MC"));
+        // --- MULTIPLE CHOICE QUESTIONS (10 Questions) ---
         
-        questions.add(new Question("Which planet is closest to the Sun?", 
-            new String[]{"Venus", "Mercury", "Earth", "Mars"}, 1, "MC"));
+        questions.add(new Question("What does 'e-waste' stand for?", 
+            new String[]{"Environmental waste", "Electronic waste", "Energy waste", "Edible waste"}, 1, "MC"));
         
-        questions.add(new Question("Who wrote 'Romeo and Juliet'?", 
-            new String[]{"Charles Dickens", "Mark Twain", "William Shakespeare", "Jane Austen"}, 2, "MC"));
+        questions.add(new Question("Which of the following is considered e-waste?", 
+            new String[]{"A broken wooden chair", "A glass bottle", "An old, discarded smartphone", "Used paper"}, 2, "MC"));
         
-        questions.add(new Question("What is the largest ocean on Earth?", 
-            new String[]{"Atlantic", "Indian", "Arctic", "Pacific"}, 3, "MC"));
+        questions.add(new Question("What is a major environmental risk of improperly disposing of e-waste?", 
+            new String[]{"It smells bad", "Toxic chemicals like lead leak into groundwater", "It takes up too much physical space", "It creates noise pollution"}, 1, "MC"));
         
-        questions.add(new Question("In what year did World War II end?", 
-            new String[]{"1943", "1944", "1945", "1946"}, 2, "MC"));
+        questions.add(new Question("Which Sustainable Development Goal (SDG) focuses on reducing e-waste?", 
+            new String[]{"SDG 1", "SDG 4", "SDG 12", "SDG 14"}, 2, "MC"));
         
-        // True/False Questions
-        questions.add(new Question("The Great Wall of China is visible from space.", 
+        questions.add(new Question("What is the 'Right to Repair' movement?", 
+            new String[]{"A law making it illegal to break electronics", "Legislation allowing consumers to fix their own devices", "A guide for recycling", "A smartphone brand"}, 1, "MC"));
+        
+        questions.add(new Question("What is the most sustainable way to handle a functioning old laptop?", 
+            new String[]{"Throw it in the trash", "Burn it", "Donate or sell it", "Bury it"}, 2, "MC"));
+            
+        questions.add(new Question("Which precious metal is commonly recovered from recycled smartphones?", 
+            new String[]{"Gold", "Uranium", "Plutonium", "Bronze"}, 0, "MC"));
+            
+        questions.add(new Question("What does 'planned obsolescence' refer to?", 
+            new String[]{"Accidentally dropping a phone", "Designing products to have a limited lifespan", "Forgetting to charge a battery", "Recycling old parts"}, 1, "MC"));
+            
+        questions.add(new Question("Where does a large percentage of undocumented e-waste often end up?", 
+            new String[]{"Space", "Bottom of the ocean", "Informal recycling sectors in developing nations", "Local museums"}, 2, "MC"));
+            
+        questions.add(new Question("How can consumers best reduce e-waste generation?", 
+            new String[]{"Buy refurbished electronics instead of new ones", "Buy two of everything", "Throw away devices yearly", "Only use disposable batteries"}, 0, "MC"));
+
+        // --- TRUE/FALSE QUESTIONS (10 Questions) ---
+        
+        questions.add(new Question("E-waste is currently the fastest-growing waste stream in the world.", 
+            new String[]{"True", "False"}, 0, "TF"));
+        
+        questions.add(new Question("It is perfectly safe to throw old lithium-ion batteries in the regular household trash.", 
             new String[]{"True", "False"}, 1, "TF"));
         
-        questions.add(new Question("Java was named after a coffee bean.", 
+        questions.add(new Question("Recycling e-waste can help reduce global greenhouse gas emissions.", 
             new String[]{"True", "False"}, 0, "TF"));
         
-        questions.add(new Question("The Eiffel Tower was originally intended to be permanent.", 
+        questions.add(new Question("All components of an old computer are completely unrecyclable.", 
             new String[]{"True", "False"}, 1, "TF"));
         
-        questions.add(new Question("Honey never spoils and can last forever.", 
+        questions.add(new Question("Upgrading devices less frequently helps significantly reduce e-waste.", 
             new String[]{"True", "False"}, 0, "TF"));
-        
-        questions.add(new Question("Antarctica is the hottest continent.", 
+            
+        questions.add(new Question("Most of the world's e-waste is formally recycled and properly documented.", 
             new String[]{"True", "False"}, 1, "TF"));
-        
-        // More Multiple Choice Questions
-        questions.add(new Question("What is the smallest prime number?", 
-            new String[]{"0", "1", "2", "3"}, 2, "MC"));
-        
-        questions.add(new Question("Which element has the atomic number 1?", 
-            new String[]{"Helium", "Hydrogen", "Lithium", "Beryllium"}, 1, "MC"));
-        
-        questions.add(new Question("How many continents are there?", 
-            new String[]{"5", "6", "7", "8"}, 2, "MC"));
-        
-        questions.add(new Question("What is the boiling point of water at sea level?", 
-            new String[]{"90°C", "100°C", "110°C", "120°C"}, 1, "MC"));
-        
-        questions.add(new Question("Which country is home to the Statue of Liberty?", 
-            new String[]{"France", "Canada", "United States", "Mexico"}, 2, "MC"));
-        
-        // More True/False Questions
-        questions.add(new Question("A decade equals 10 years.", 
+            
+        questions.add(new Question("Mercury and lead are common toxic substances found in old monitors.", 
             new String[]{"True", "False"}, 0, "TF"));
-        
-        questions.add(new Question("The human brain weighs approximately 2 kg.", 
-            new String[]{"True", "False"}, 0, "TF"));
-        
-        questions.add(new Question("Dolphins are fish.", 
+            
+        questions.add(new Question("Cloud storage has completely eliminated the physical e-waste problem.", 
             new String[]{"True", "False"}, 1, "TF"));
-        
-        questions.add(new Question("All squares are rectangles.", 
+            
+        questions.add(new Question("Extracting valuable materials from e-waste is sometimes called 'urban mining'.", 
             new String[]{"True", "False"}, 0, "TF"));
-        
-        questions.add(new Question("The speed of light is faster than the speed of sound.", 
-            new String[]{"True", "False"}, 0, "TF"));
+            
+        questions.add(new Question("Throwing electronics in landfills helps fertilize the soil.", 
+            new String[]{"True", "False"}, 1, "TF"));
     }
     
     /**
