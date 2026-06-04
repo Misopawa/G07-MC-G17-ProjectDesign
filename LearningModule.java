@@ -44,7 +44,7 @@ public class LearningModule implements ContentRenderable {
             "When a gadget breaks, our first instinct is to throw it away. Instead, try to fix it! Replacing a cracked screen or a dead battery is much cheaper and better for the earth than buying a whole new device.",
             "If a device is completely broken and cannot be fixed, it must be recycled properly. Never put it in the regular trash. Take it to a special e-waste drop-off center where they can safely melt down the metals and plastics.",
             "Did you know there is real gold and silver inside your computer? When we recycle old electronics, factories can take those valuable metals out and use them to build new phones, saving the earth from more destructive mining.",
-            "You have the power to change things! Take care of your electronics, buy second-hand devices when you can, and always recycle properly. Responsible consumption starts with your everyday choices."
+            "You have the power to change things! Take care of your electronics, buy second-hand devices when you can and always recycle properly. Responsible consumption starts with your everyday choices."
         };
         
         // 10 Image Paths (Ensure these match the files in your project folder)
