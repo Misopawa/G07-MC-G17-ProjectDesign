@@ -3,7 +3,7 @@ import javax.swing.*;
 
 /**
  * Creator: Siti Nur Amira binti Zulkiply
- * Tester: [Insert Group Member Name Here]
+ * Tester: Rosaliny Lisa anak Roza, Mohamad Nazri Bin Sumarato , Mohamad Nazri Bin Sumarato
  * Description: Class that holds and manages the 10 pages of SDG 12 content.
  */
 public class LearningModule implements ContentRenderable {
