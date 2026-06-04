@@ -2,8 +2,8 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
- * Creator: Siti Nur Amira binti Zulkiply
- * Tester: Rosaliny Lisa anak Roza, Mohamad Nazri Bin Sumarato , Mohamad Nazri Bin Sumarato
+ * Creator: Siti Nur Amira binti Zulkiply (107599)
+ * Tester: Rosaliny Lisa anak Roza (106166), Mohamad Nazri Bin Sumarato (84546), Mohamad Nazri Bin Sumarato(845553)
  * Description: Class that holds and manages the 10 pages of SDG 12 content.
  */
 public class LearningModule implements ContentRenderable {
