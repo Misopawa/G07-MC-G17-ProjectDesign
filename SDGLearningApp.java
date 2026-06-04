@@ -2,12 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+// ====== MEMBER 4 IMPORTS ======
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
- * Creator: Siti Nur Amira binti Zulkiply
+ * Creator: Siti Nur Amira binti Zulkiply and Mohamad Nazri Bin Sumarato (84546)
  * Tester: Rosaliny Lisa Anak Roza (106166)
  * Description: Main GUI for the Desktop-based SDG Learning Application.
- * Integrated with Member 3's Gamification Module.
+ * Integrated with Member 3's Gamification Module and Member 4's Storage Module.
  */
 public class SDGLearningApp extends JFrame {
 
@@ -19,6 +22,9 @@ public class SDGLearningApp extends JFrame {
     
     // ====== INTEGRATION: MEMBER 3 OBJECT DECLARATION ======
     private GamificationModule gamificationModule;
+
+    // ====== MEMBER 4 INTEGRATION: OBJECT DECLARATION ======
+    private DataStorable fileStorageModule;
 
     public SDGLearningApp() {
         setTitle("SDG 12: Responsible Consumption and Production");
@@ -35,9 +41,15 @@ public class SDGLearningApp extends JFrame {
         // ====== INTEGRATION: INITIALIZE MEMBER 3 OBJECT ======
         gamificationModule = new GamificationModule();
 
+        // ====== MEMBER 4 INTEGRATION: INITIALIZE OBJECT ======
+        fileStorageModule = new FileStorageModule();
+
         buildDashboard();
         buildLearningScreens();
         buildQuizScreen();
+        
+        // ====== MEMBER 4 INTEGRATION: BUILD LEADERBOARD ======
+        buildLeaderboardScreen();
 
         add(mainContainer);
     }
@@ -70,6 +82,19 @@ public class SDGLearningApp extends JFrame {
             }
         });
         dashboard.add(startBtn);
+
+        // ====== MEMBER 4 INTEGRATION: VIEW LEADERBOARD BUTTON ======
+        dashboard.add(Box.createVerticalStrut(15));
+        JButton leaderboardBtn = new JButton("View Leaderboard");
+        leaderboardBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leaderboardBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                refreshLeaderboard();
+                cardLayout.show(mainContainer, "Leaderboard");
+            }
+        });
+        dashboard.add(leaderboardBtn);
+        // ===========================================================
 
         mainContainer.add(dashboard, "Dashboard");
     }
@@ -302,14 +327,61 @@ public class SDGLearningApp extends JFrame {
         resultsPanel.add(motivationLabel);
         resultsPanel.add(Box.createVerticalStrut(30));
         
+        // ====== MEMBER 4 INTEGRATION: SAVE SCORE FORM ======
+        JPanel savePanel = new JPanel();
+        savePanel.setLayout(new BoxLayout(savePanel, BoxLayout.X_AXIS));
+        savePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        savePanel.setMaximumSize(new Dimension(350, 30));
+        
+        JLabel nameLabel = new JLabel("Enter Name: ");
+        JTextField nameField = new JTextField(10);
+        JButton saveBtn = new JButton("Save Score");
+        
+        saveBtn.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            if(!name.isEmpty()) {
+                fileStorageModule.saveScore(name, score, gamificationModule.getCurrentBadge());
+                saveBtn.setEnabled(false);
+                saveBtn.setText("Saved!");
+                JOptionPane.showMessageDialog(null, "Score saved to Leaderboard!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter your name.", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        
+        savePanel.add(nameLabel);
+        savePanel.add(nameField);
+        savePanel.add(Box.createHorizontalStrut(10));
+        savePanel.add(saveBtn);
+        resultsPanel.add(savePanel);
+        resultsPanel.add(Box.createVerticalStrut(20));
+        // ===================================================
+
+        // Navigation Buttons (Retake & Leaderboard)
+        JPanel bottomBtnsPanel = new JPanel();
+        bottomBtnsPanel.setLayout(new BoxLayout(bottomBtnsPanel, BoxLayout.X_AXIS));
+        bottomBtnsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         // Retake button
         JButton retakeBtn = new JButton("Retake Quiz");
-        retakeBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         retakeBtn.addActionListener(e -> {
             quizModule.resetQuiz();
             displayQuizQuestion();
         });
-        resultsPanel.add(retakeBtn);
+        bottomBtnsPanel.add(retakeBtn);
+        
+        bottomBtnsPanel.add(Box.createHorizontalStrut(15));
+        
+        // ====== MEMBER 4 INTEGRATION: LEADERBOARD BUTTON ======
+        JButton viewLeadBtn = new JButton("Leaderboard");
+        viewLeadBtn.addActionListener(e -> {
+            refreshLeaderboard();
+            cardLayout.show(mainContainer, "Leaderboard");
+        });
+        bottomBtnsPanel.add(viewLeadBtn);
+        // ======================================================
+        
+        resultsPanel.add(bottomBtnsPanel);
         
         quizContentPanel.add(resultsPanel, BorderLayout.CENTER);
     }
@@ -330,6 +402,50 @@ public class SDGLearningApp extends JFrame {
             return "🔄 Don't give up! Review the learning materials and retake the quiz.";
         }
     }
+
+    // ====== MEMBER 4 INTEGRATION: LEADERBOARD SCREEN COMPONENTS ======
+    private JTable leaderboardTable;
+    private DefaultTableModel tableModel;
+    
+    private void buildLeaderboardScreen() {
+        JPanel leaderboardPanel = new JPanel(new BorderLayout());
+        leaderboardPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        JLabel titleLabel = new JLabel("Global Leaderboard", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        leaderboardPanel.add(titleLabel, BorderLayout.NORTH);
+        
+        // Setup Table
+        String[] columns = {"Rank", "Name", "Score", "Badge"};
+        tableModel = new DefaultTableModel(columns, 0);
+        leaderboardTable = new JTable(tableModel);
+        leaderboardTable.setEnabled(false); // Make it read-only
+        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        
+        JScrollPane scrollPane = new JScrollPane(leaderboardTable);
+        leaderboardPanel.add(scrollPane, BorderLayout.CENTER);
+        
+        JPanel navPanel = new JPanel();
+        JButton homeBtn = new JButton("Back to Home");
+        homeBtn.addActionListener(e -> cardLayout.show(mainContainer, "Dashboard"));
+        navPanel.add(homeBtn);
+        
+        leaderboardPanel.add(navPanel, BorderLayout.SOUTH);
+        mainContainer.add(leaderboardPanel, "Leaderboard");
+    }
+    
+    // Call this before showing the leaderboard to get fresh data
+    private void refreshLeaderboard() {
+        tableModel.setRowCount(0); // Clear old data
+        List<String[]> scores = fileStorageModule.loadScores();
+        
+        int rank = 1;
+        for (String[] data : scores) {
+            tableModel.addRow(new Object[]{rank + ".", data[0], data[1] + "%", data[2]});
+            rank++;
+        }
+    }
+    // =================================================================
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
