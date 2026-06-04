@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 /**
- * Creator: Siti Nur Amira binti Zulkiply and Mohamad Nazri Bin Sumarato (84546)
+ * Creator: Siti Nur Amira binti Zulkiply(107599) and Mohamad Nazri Bin Sumarato (84546)
  * Tester: Rosaliny Lisa Anak Roza (106166)
  * Description: Main GUI for the Desktop-based SDG Learning Application.
  * Integrated with Member 3's Gamification Module and Member 4's Storage Module.
