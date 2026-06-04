@@ -1,6 +1,6 @@
 /**
  * Creator: Siti Nur Amira binti Zulkiply
- * Tester: [Insert Group Member Name Here]
+ * Tester: Rosaliny Lisa anak Roza
  * Description: Interface for rendering educational content pages.
  */
 public interface ContentRenderable {
