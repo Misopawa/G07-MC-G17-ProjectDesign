@@ -118,14 +118,14 @@ public class SDGLearningApp extends JFrame {
             textArea.setBackground(UIManager.getColor("Panel.background"));
             centerContent.add(textArea, BorderLayout.NORTH);
             
-            // Load actual images
+            // 1. Load the actual original image
             ImageIcon icon = new ImageIcon(learningModule.getImagePath(i));
             JLabel imageLabel = new JLabel(icon);
-
-            // Set size and border
-            imageLabel.setPreferredSize(new Dimension(300, 200));
+            
+            // 2. Add the border, but DO NOT use setPreferredSize()
             imageLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
+            
+            // 3. Add it to the screen
             centerContent.add(imageLabel, BorderLayout.CENTER);
             pagePanel.add(centerContent, BorderLayout.CENTER);
 
