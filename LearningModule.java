@@ -36,7 +36,7 @@ public class LearningModule implements ContentRenderable {
         // 10 Paragraphs of Content
         pageTexts = new String[]{
             "Sustainable Development Goal 12 is about Responsible Consumption and Production. It simply means we should think carefully before we buy things, use them wisely and throw them away properly so we don't destroy our planet.",
-            "Electronic waste, or 'e-waste', happens when we throw away old gadgets like TVs, laptops and chargers. It is the fastest-growing type of trash in the world because we constantly buy new technology.",
+            "Electronic waste, or 'E-waste', happens when we throw away old gadgets like TVs, laptops and chargers. It is the fastest-growing type of trash in the world because we constantly buy new technology.",
             "Think about smartphones. Many people buy a new phone every year just because a newer model comes out, even if their old phone works perfectly fine. This creates a massive amount of unnecessary waste.",
             "E-waste is dangerous. Gadgets contain harmful chemicals like lead and mercury. When we throw phones in a normal trash bin, these chemicals leak into the soil and water, poisoning plants and animals.",
             "The easiest way to help is to simply buy less. Before buying a new gadget, ask yourself: 'Do I really need this or do I just want it?' Keeping your current devices longer makes a huge difference.",
