@@ -229,45 +229,29 @@ public class SDGLearningApp extends JFrame {
      * Displays the current question with options as buttons
      */
     private void displayCurrentQuestion() {
-        Question currentQuestion = quizModule.getCurrentQuestion();
-        
-        if (currentQuestion == null) {
-            return;
-        }
-        
-        // Create a scrollable panel for the content
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        // Question counter
-        JLabel questionCounterLabel = new JLabel(
-            "Question " + quizModule.getCurrentQuestionNumber() + " of " + quizModule.getTotalQuestions()
-        );
-        questionCounterLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        questionCounterLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contentPanel.add(questionCounterLabel);
-        contentPanel.add(Box.createVerticalStrut(10));
-        
-        // Question text (wrapped)
-        JLabel questionLabel = new JLabel(
-            "<html><b>" + currentQuestion.getQuestionText() + "</b></html>"
-        );
-        questionLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        questionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        questionLabel.setMaximumSize(new Dimension(350, 100));
-        contentPanel.add(questionLabel);
-        contentPanel.add(Box.createVerticalStrut(20));
-        
         // Answer options as buttons
         String[] options = currentQuestion.getOptions();
         for (int i = 0; i < options.length; i++) {
             final int answerIndex = i;
-            JButton optionButton = new JButton(options[i]);
+            
+            // Wrapping text in HTML allows long answers to wrap nicely instead of cutting off
+            JButton optionButton = new JButton("<html>" + options[i] + "</html>");
+            
             optionButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-            optionButton.setMaximumSize(new Dimension(350, 50));
+            
+            // 1. Define a strict, uniform size for all buttons (Width: 350, Height: 50)
+            Dimension uniformSize = new Dimension(350, 50);
+            
+            // 2. Lock the size by setting all three dimension properties
+            optionButton.setPreferredSize(uniformSize);
+            optionButton.setMinimumSize(uniformSize);
+            optionButton.setMaximumSize(uniformSize);
+            
+            // 3. Styling
             optionButton.setFont(new Font("Arial", Font.PLAIN, 12));
             optionButton.setHorizontalAlignment(SwingConstants.LEFT);
+            // Adds a small margin inside the button so text isn't glued to the left edge
+            optionButton.setMargin(new Insets(5, 15, 5, 15)); 
             
             // Add action listener to submit answer and move to next question
             optionButton.addActionListener(e -> {
@@ -276,15 +260,8 @@ public class SDGLearningApp extends JFrame {
             });
             
             contentPanel.add(optionButton);
-            contentPanel.add(Box.createVerticalStrut(10));
+            contentPanel.add(Box.createVerticalStrut(15)); // Adds clean spacing between buttons
         }
-        
-        // Add content to scrollable pane
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        quizContentPanel.add(scrollPane, BorderLayout.CENTER);
-    }
 
     /**
      * Displays the final quiz results and motivational message
