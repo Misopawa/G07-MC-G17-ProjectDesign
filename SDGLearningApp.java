@@ -134,6 +134,23 @@ public class SDGLearningApp extends JFrame {
             homeBtn.addActionListener(e -> cardLayout.show(mainContainer, "Dashboard"));
             navPanel.add(homeBtn);
 
+            // === NEW BACK BUTTON CODE ===
+            // Only show the back button if we are not on the first page
+            if (i > 0) {
+                JButton backBtn = new JButton("<< Back");
+                final int prevPage = i - 1; // Figure out the previous page number
+                
+                backBtn.addActionListener(e -> {
+                    try {
+                        learningModule.displayPage(prevPage); // Go to that page
+                    } catch (PageNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+                navPanel.add(backBtn);
+            }
+            // ============================
+
             if (i < 9) {
                 JButton nextBtn = new JButton("Next Page >>");
                 final int nextPage = i + 1;
@@ -157,8 +174,6 @@ public class SDGLearningApp extends JFrame {
             
             pagePanel.add(navPanel, BorderLayout.SOUTH);
             mainContainer.add(pagePanel, "Page" + i);
-        }
-    }
 
     private void buildQuizScreen() {
         JPanel quizPanel = new JPanel(new BorderLayout());
