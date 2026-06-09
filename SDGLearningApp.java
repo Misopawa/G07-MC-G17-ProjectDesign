@@ -310,10 +310,11 @@ public class SDGLearningApp extends JFrame {
             JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
             buttonWrapper.setOpaque(false); 
             buttonWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+            buttonWrapper.setMaximumSize(new Dimension(400, 55));
             buttonWrapper.add(optionButton);
             
             contentPanel.add(buttonWrapper);
-            contentPanel.add(Box.createVerticalStrut(15)); 
+            contentPanel.add(Box.createVerticalStrut(20)); 
         }
         
         // === THESE ARE THE LINES THAT LIKELY GOT DELETED ===
