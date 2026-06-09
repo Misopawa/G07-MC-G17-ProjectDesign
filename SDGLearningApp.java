@@ -228,7 +228,40 @@ public class SDGLearningApp extends JFrame {
     /**
      * Displays the current question with options as buttons
      */
+    /**
+     * Displays the current question with options as buttons
+     */
     private void displayCurrentQuestion() {
+        Question currentQuestion = quizModule.getCurrentQuestion();
+        
+        if (currentQuestion == null) {
+            return;
+        }
+        
+        // Create a scrollable panel for the content
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Question counter
+        JLabel questionCounterLabel = new JLabel(
+            "Question " + quizModule.getCurrentQuestionNumber() + " of " + quizModule.getTotalQuestions()
+        );
+        questionCounterLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        questionCounterLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(questionCounterLabel);
+        contentPanel.add(Box.createVerticalStrut(10));
+        
+        // Question text (wrapped)
+        JLabel questionLabel = new JLabel(
+            "<html><b>" + currentQuestion.getQuestionText() + "</b></html>"
+        );
+        questionLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        questionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        questionLabel.setMaximumSize(new Dimension(350, 100));
+        contentPanel.add(questionLabel);
+        contentPanel.add(Box.createVerticalStrut(20));
+        
         // Answer options as buttons
         String[] options = currentQuestion.getOptions();
         for (int i = 0; i < options.length; i++) {
@@ -262,6 +295,13 @@ public class SDGLearningApp extends JFrame {
             contentPanel.add(optionButton);
             contentPanel.add(Box.createVerticalStrut(15)); // Adds clean spacing between buttons
         }
+        
+        // Add content to scrollable pane
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        quizContentPanel.add(scrollPane, BorderLayout.CENTER);
+    }
 
     /**
      * Displays the final quiz results and motivational message
