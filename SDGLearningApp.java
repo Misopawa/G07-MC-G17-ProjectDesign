@@ -231,6 +231,9 @@ public class SDGLearningApp extends JFrame {
     /**
      * Displays the current question with options as buttons
      */
+    /**
+     * Displays the current question with options as buttons
+     */
     private void displayCurrentQuestion() {
         Question currentQuestion = quizModule.getCurrentQuestion();
         
@@ -250,7 +253,7 @@ public class SDGLearningApp extends JFrame {
         questionCounterLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         questionCounterLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         contentPanel.add(questionCounterLabel);
-        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(Box.createVerticalStrut(6));
         
         // Question text (wrapped)
         JLabel questionLabel = new JLabel(
@@ -258,7 +261,7 @@ public class SDGLearningApp extends JFrame {
         );
         questionLabel.setFont(new Font("Arial", Font.BOLD, 14));
         questionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        questionLabel.setMaximumSize(new Dimension(350, 100));
+        questionLabel.setMaximumSize(new Dimension(300, 50));
         contentPanel.add(questionLabel);
         contentPanel.add(Box.createVerticalStrut(20));
         
@@ -267,40 +270,59 @@ public class SDGLearningApp extends JFrame {
         for (int i = 0; i < options.length; i++) {
             final int answerIndex = i;
             
-            // Wrapping text in HTML allows long answers to wrap nicely instead of cutting off
             JButton optionButton = new JButton("<html>" + options[i] + "</html>");
             
-            optionButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-            
-            // 1. Define a strict, uniform size for all buttons (Width: 350, Height: 50)
-            Dimension uniformSize = new Dimension(230, 50);
-            
-            // 2. Lock the size by setting all three dimension properties
+            Dimension uniformSize = new Dimension(300, 50);
             optionButton.setPreferredSize(uniformSize);
-            optionButton.setMinimumSize(uniformSize);
-            optionButton.setMaximumSize(uniformSize);
             
-            // 3. Styling
             optionButton.setFont(new Font("Arial", Font.PLAIN, 12));
             optionButton.setHorizontalAlignment(SwingConstants.LEFT);
-            // Adds a small margin inside the button so text isn't glued to the left edge
-            optionButton.setMargin(new Insets(5, 15, 5, 15)); 
+            optionButton.setMargin(new Insets(5, 50, 5, 15)); 
             
-            // Add action listener to submit answer and move to next question
+            // Required for background colors to show up properly
+            optionButton.setOpaque(true);
+            optionButton.setFocusPainted(false);
+            
+            // Add action listener to check answer, change color, and pause
             optionButton.addActionListener(e -> {
+                
+                // IMPORTANT: Change 'getCorrectAnswerIndex()' if your Question class uses a different name!
+                if (answerIndex == currentQuestion.getCorrectAnswerIndex()) {
+                    optionButton.setBackground(new Color(144, 238, 144)); // Light Green
+                } else {
+                    optionButton.setBackground(new Color(255, 182, 193)); // Light Red
+                }
+                
                 quizModule.submitAnswer(answerIndex);
-                displayQuizQuestion(); // Refresh to show next question or results
+                
+                // Using full javax.swing.Timer path to prevent import errors
+                javax.swing.Timer timer = new javax.swing.Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        displayQuizQuestion(); // Load the next screen after 1 second
+                    }
+                });
+                timer.setRepeats(false); 
+                timer.start();
             });
             
-            contentPanel.add(optionButton);
-            contentPanel.add(Box.createVerticalStrut(15)); // Adds clean spacing between buttons
+            // The Wrapper Panel (The "Cup") to prevent stretching
+            JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+            buttonWrapper.setOpaque(false); 
+            buttonWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+            buttonWrapper.add(optionButton);
+            
+            contentPanel.add(buttonWrapper);
+            contentPanel.add(Box.createVerticalStrut(15)); 
         }
         
-        // Add content to scrollable pane
+        // === THESE ARE THE LINES THAT LIKELY GOT DELETED ===
+        // Add content to scrollable pane and stick it to the screen
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         quizContentPanel.add(scrollPane, BorderLayout.CENTER);
+        // ===================================================
     }
 
     /**
