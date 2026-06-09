@@ -18,17 +18,19 @@ public class GamificationModule implements RewardSystem {
     }
 
     // INTERFACE IMPLEMENTATION (METHOD OVERRIDING)
-    @Override
+@Override
     public void awardBadge(double scorePercentage) {
-        // Give a badge based on the score scale from assignment guidelines
+        // Give a badge based on the exact 5-tier score scale from assignment guidelines
         if (scorePercentage >= 80) {
-            currentBadge = "Green Tech Champion"; // 80-100%: Outstanding!
+            currentBadge = "Green Tech Champion"; // 80 - 100%: Outstanding!
         } else if (scorePercentage >= 60) {
-            currentBadge = "E-Waste Warrior";    // 60-79%: That's good!
+            currentBadge = "E-Waste Warrior";    // 60 - 79%: That's good!
         } else if (scorePercentage >= 40) {
-            currentBadge = "Eco-Novice";          // 40-59%: Good try!
+            currentBadge = "Eco-Novice";          // 40 - 59%: Good try!
+        } else if (scorePercentage >= 20) {
+            currentBadge = "Recycling Trainee";   // 20 - 39%: You can do better!
         } else {
-            currentBadge = "Recycling Trainee";   // Below 40%: Try again!
+            currentBadge = "Eco-Beginner";        // 0 - 19%: Don't give up!
         }
     }
 
