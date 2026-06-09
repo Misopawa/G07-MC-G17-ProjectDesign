@@ -273,7 +273,7 @@ public class SDGLearningApp extends JFrame {
             optionButton.setAlignmentX(Component.LEFT_ALIGNMENT);
             
             // 1. Define a strict, uniform size for all buttons (Width: 350, Height: 50)
-            Dimension uniformSize = new Dimension(350, 50);
+            Dimension uniformSize = new Dimension(230, 50);
             
             // 2. Lock the size by setting all three dimension properties
             optionButton.setPreferredSize(uniformSize);
