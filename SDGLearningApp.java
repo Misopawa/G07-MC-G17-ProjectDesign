@@ -174,6 +174,8 @@ public class SDGLearningApp extends JFrame {
             
             pagePanel.add(navPanel, BorderLayout.SOUTH);
             mainContainer.add(pagePanel, "Page" + i);
+        }
+    }
 
     private void buildQuizScreen() {
         JPanel quizPanel = new JPanel(new BorderLayout());
